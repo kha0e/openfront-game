@@ -13,6 +13,7 @@
   const troopValue = document.getElementById('troop-value');
   const buildPortBtn = document.getElementById('build-port-btn');
   const buildCityBtn = document.getElementById('build-city-btn');
+  const scoreboard = document.getElementById('scoreboard');
   // Update slider label
   troopSlider.addEventListener('input', () => {
     troopValue.textContent = troopSlider.value + '%';
@@ -87,6 +88,7 @@
           }
         }
         drawGame();
+        updateScoreboard();
       } catch (err) {
         console.error('Error parsing state', err);
       }
@@ -103,12 +105,17 @@
     const { x, y } = coords;
     const idx = y * gameState.gridW + x;
     const cell = gameState.cells[idx];
-    const isShift = ev.shiftKey;
+    // Default click behaviour:
+    //  - If no cell selected: select your own cell or spawn if clicking on neutral land.
+    //  - If a cell is selected: clicking on any neutral or enemy land will expand from
+    //    the selected cell into all adjacent targets using the chosen troop percentage.
+    //    Clicking on another of your cells simply changes the selection.
     if (!selectedCell) {
       if (cell.owner === playerId) {
+        // Select one of your cells
         selectedCell = { x, y };
       } else if (cell.land && !cell.owner) {
-        // Spawn
+        // Spawn on neutral land
         fetch('/api/spawn', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -116,24 +123,17 @@
         });
       }
     } else {
-      if (isShift) {
-        // Attack
+      if (cell.owner === playerId) {
+        // Clicking on your own cell changes selection
+        selectedCell = { x, y };
+      } else if (cell.land) {
+        // Attack/expand from the selected cell into all neighbouring targets
         const percent = parseInt(troopSlider.value, 10) / 100;
-        fetch('/api/attack', {
+        fetch('/api/expand', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            playerId,
-            srcX: selectedCell.x,
-            srcY: selectedCell.y,
-            dstX: x,
-            dstY: y,
-            troopsPercent: percent,
-          }),
+          body: JSON.stringify({ playerId, x: selectedCell.x, y: selectedCell.y, troopsPercent: percent }),
         });
-      }
-      if (cell.owner === playerId) {
-        selectedCell = { x, y };
       }
     }
   });
@@ -211,14 +211,35 @@
           );
           ctx.fill();
         }
-        if (cell.owner && cell.troops > 0) {
-          ctx.fillStyle = '#000';
-          ctx.font = `${Math.floor(cellH * 0.5)}px sans-serif`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(cell.troops.toString(), x * cellW + cellW / 2, y * cellH + cellH / 2);
-        }
+        // We no longer display troop counts on individual cells; troop counts are shown in the scoreboard
       }
     }
+  }
+
+  // Update the scoreboard UI with player names and troop counts
+  function updateScoreboard() {
+    if (!gameState || !scoreboard) return;
+    const entries = [];
+    for (const pid in gameState.players) {
+      const p = gameState.players[pid];
+      // Count territory size
+      let territorySize = 0;
+      for (let idx = 0; idx < gameState.cells.length; idx++) {
+        if (gameState.cells[idx].owner === pid) territorySize++;
+      }
+      entries.push({ id: pid, name: p.name, color: p.color, troops: p.troops ?? 0, territory: territorySize });
+    }
+    // Sort by troop count descending
+    entries.sort((a, b) => b.troops - a.troops);
+    let html = '';
+    entries.forEach((e) => {
+      const you = e.id === playerId;
+      html += `<div class="player-row${you ? ' you' : ''}">`;
+      html += `<span class="color-box" style="background:${e.color}"></span>`;
+      html += `<span class="name">${e.name}</span>`;
+      html += `<span class="value">${e.troops} troupes (${e.territory})</span>`;
+      html += `</div>`;
+    });
+    scoreboard.innerHTML = html;
   }
 })();

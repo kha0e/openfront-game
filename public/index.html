@@ -20,6 +20,8 @@
     </div>
     <div id="game-container">
       <canvas id="game-canvas"></canvas>
+      <!-- Scoreboard overlay showing each player's name and total troops -->
+      <div id="scoreboard" class="scoreboard"></div>
       <div id="hud">
         <div class="control-group">
           <label for="troop-slider">Pourcentage de troupes à envoyer :</label>
@@ -29,6 +31,12 @@
         <div class="control-group">
           <button id="build-port-btn">Construire un port (5 troupes)</button>
           <button id="build-city-btn">Construire une ville (10 troupes)</button>
+        </div>
+        <div class="control-group instructions">
+          <p>
+            Cliquez sur votre territoire pour le sélectionner. Cliquez ensuite sur une case neutre ou ennemie pour attaquer et étendre votre territoire automatiquement.
+            Utilisez le curseur pour régler le pourcentage de troupes envoyées.
+          </p>
         </div>
       </div>
     </div>
