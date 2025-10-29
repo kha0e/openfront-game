@@ -3,43 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jeu OpenFront en ligne</title>
-    <link rel="stylesheet" href="style.css" />
-    <!-- Socket.io client library from CDN -->
-    <script src="https://cdn.socket.io/4.7.1/socket.io.min.js" integrity="sha384-8vMCMYK9FTJMcjsBvny30mZ4fcAclW713N4QeZyjdrg0dp2PbgCSv95oNWB+gtr8" crossorigin="anonymous"></script>
-  </head>
-  <body>
-    <div id="login-overlay" class="overlay">
-      <div class="dialog">
-        <h2>Bienvenue !</h2>
-        <p>Entrez votre nom pour rejoindre la partie :</p>
-        <input id="name-input" type="text" placeholder="Votre nom" />
-        <button id="join-btn">Rejoindre</button>
-        <p id="join-error" class="error"></p>
-      </div>
-    </div>
-    <div id="game-container">
-      <canvas id="game-canvas"></canvas>
-      <div id="hud">
-        <div class="control-group">
-          <label for="troop-slider">Pourcentage de troupes à envoyer :</label>
-          <input type="range" id="troop-slider" min="10" max="100" value="50" />
-          <span id="troop-value">50%</span>
-        </div>
-        <div class="control-group">
-          <button id="build-port-btn">Construire un port (5 troupes)</button>
-          <button id="build-city-btn">Construire une ville (10 troupes)</button>
-        </div>
-      </div>
-    </div>
-    <script src="client.js"></script>
-  </body>
-</html>   <title>Jeu OpenFront en ligne</title>
     <link rel="stylesheet" href="style.css" />
     <!-- Socket.io client library from CDN -->
     <script src="https://cdn.socket.io/4.7.1/socket.io.min.js" integrity="sha384-8vMCMYK9FTJMcjsBvny30mZ4fcAclW713N4QeZyjdrg0dp2PbgCSv95oNWB+gtr8" crossorigin="anonymous"></script>
