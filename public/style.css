@@ -27,7 +27,7 @@ body {
   background: rgba(0, 0, 0, 0.6);
   padding: 10px;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .control-group {
@@ -101,23 +101,27 @@ body {
   background: rgba(0, 0, 0, 0.6);
   padding: 10px;
   border-radius: 4px;
-  font-size: 14px;
-  max-width: 220px;
+  /* Make the scoreboard more prominent and easier to read. Increase
+   * the font size and width so that troop counts and territory sizes
+   * are clear. */
+  font-size: 16px;
+  max-width: 280px;
+  line-height: 1.4;
   z-index: 50;
 }
 #scoreboard .player-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 #scoreboard .player-row.you {
   font-weight: bold;
 }
 #scoreboard .color-box {
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
-  margin-right: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  margin-right: 8px;
   flex-shrink: 0;
 }
