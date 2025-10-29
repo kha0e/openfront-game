@@ -237,7 +237,12 @@
       html += `<div class="player-row${you ? ' you' : ''}">`;
       html += `<span class="color-box" style="background:${e.color}"></span>`;
       html += `<span class="name">${e.name}</span>`;
-      html += `<span class="value">${e.troops} troupes (${e.territory})</span>`;
+      // Display both the total number of troops and the size of the territory
+      // in a clearer format. Previously this was rendered as "troops (territory)"
+      // which some players found confusing. Now we explicitly label each value
+      // to show that the first number is the army size and the second is the
+      // number of tiles under the player's control.
+      html += `<span class="value">${e.troops} troupes | ${e.territory} territoires</span>`;
       html += `</div>`;
     });
     scoreboard.innerHTML = html;
